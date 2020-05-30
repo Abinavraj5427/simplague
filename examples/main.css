@@ -82,3 +82,71 @@ a, button, input, select {
 	margin-top: 20px;
 	padding: 10px;
 }
+
+#input_container{
+	margin: 20px;
+	width: 15%;
+	height: auto;
+	overflow: auto;
+	background-color: rgba(255, 0, 149, 0.233);
+	position: absolute;
+	z-index: 2;
+	padding: 10px;
+}
+
+#simulate_btn{
+	border-radius: 8px;
+	padding: 4px 14px;
+	background-color: #f4433654;
+	border:0;
+	outline:none;
+}
+
+#simulate_btn:hover{
+	border-radius: 8px;
+	padding: 4px 14px;
+	background-color: #f44336cb;
+	border:0;
+	outline:none;
+}
+
+
+/*SLIDER from W3Schools*/
+.slidecontainer {
+	width: 100%; /* Width of the outside container */
+  }
+  
+  /* The slider itself */
+  .slider {
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 100%; /* Full-width */
+	height: 25px; /* Specified height */
+	background: #d3d3d3; /* Grey background */
+	outline: none; /* Remove outline */
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+  }
+  
+  /* Mouse-over effects */
+  .slider:hover {
+	opacity: 1; /* Fully shown on mouse-over */
+  }
+  
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+  .slider::-webkit-slider-thumb {
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+	background: #4CAF50; /* Green background */
+	cursor: pointer; /* Cursor on hover */
+  }
+  
+  .slider::-moz-range-thumb {
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+	background: #4CAF50; /* Green background */
+	cursor: pointer; /* Cursor on hover */
+  }
