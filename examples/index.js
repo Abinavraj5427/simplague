@@ -282,29 +282,29 @@ function init() {
 
     window.addEventListener('resize', onWindowResize, false);
 
-    // A SKYBOX FOR A UNIVERSE
-    // controls.addEventListener('change', renderer);
-    // controls.minDistance = 500;
-    // controls.maxDistance = 1500;
-    // let materialArray = [];
-    // let texture_ft = new THREE.TGALoader().load('textures/galaxy+Z.tga');
-    // let texture_bk = new THREE.TGALoader().load('textures/galaxy-Z.tga');
-    // let texture_up = new THREE.TGALoader().load('textures/galaxy+Y.tga');
-    // let texture_dn = new THREE.TGALoader().load('textures/galaxy-Y.tga');
-    // let texture_lf = new THREE.TGALoader().load('textures/galaxy-X.tga');
-    // let texture_rt = new THREE.TGALoader().load('textures/galaxy+X.tga');
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
-    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
-    // for(let i = 0; i<6;i++){
-    //     materialArray[i].side = THREE.BackSide;
-    // }
-    // let skyboxGeo = new THREE.BoxGeometry(10000,10000, 10000);
-    // let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-    // scene.add(skybox); 
+    var skybox;
+    var l1 = new Promise(function (resolve, reject) {
+        function loadDone(x) {
+            console.log("skybox loaded");
+            resolve(x); // it went ok!
+        }
+        const loader = new THREE.CubeTextureLoader();
+        skybox = loader.load([
+            'textures/skybox/bkg1_right.png',
+            'textures/skybox/bkg1_left.png',
+            'textures/skybox/bkg1_top.png',
+            'textures/skybox/bkg1_bot.png',
+            'textures/skybox/bkg1_front.png',
+            'textures/skybox/bkg1_back.png',
+        ], loadDone);
+    }).
+    then(function (response) {
+        scene.background = skybox;
+        console.log("skybox loaded");
+
+    }, function (err) {
+        console.log(err);
+    });
 
     //AUDIO
     var listener = new THREE.AudioListener();

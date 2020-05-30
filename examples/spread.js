@@ -116,7 +116,6 @@ export function spreadAgain() {
     var updatedPeople2 = [];
     everyone = [];
 
-    console.log(people);
 
     totalDays += 5;
     for (var a = 0; a < people.length; a++) {
@@ -181,7 +180,6 @@ export function spreadAgain() {
     $("#percent_infected").html("Percent Infected: " + (totalInfectedPeople / (people.length - totalDeadPeople) * 100) + "%");
     $("#death_count").html("Total Dead: " + (totalDeadPeople));
     show();
-    console.log(everyone);
     return everyone;
 }
 
