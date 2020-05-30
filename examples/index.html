@@ -10,92 +10,112 @@
 </head>
 
 <body>
-	<div id = "dashboard">
+	<div id="dashboard">
 		<div id="input_container">
 			<label>Simulate</label>
-			<br/>
-			<label id = "population_label">Population: 500</label>
+			<br />
+			<label id="population_label">Population: 500</label>
 			<div class="slidecontainer">
 				<input type="range" min="100" max="1000" value="500" class="slider" id="population">
 			</div>
-			<label id = "social_distance_label">Social Distancing: 5</label>
+			<label id="social_distance_label">Social Distancing: 5</label>
 			<div class="slidecontainer">
 				<input type="range" min="0" max="10" value="5" class="slider" id="social_distance">
 			</div>
-			<label id = "social_distance_rate_label">Social Distancing Participation Rate: 50%</label>
+			<label id="social_distance_rate_label">Social Distancing Participation Rate: 50%</label>
 			<div class="slidecontainer">
 				<input type="range" min="0" max="100" value="50" class="slider" id="social_distance_rate">
 			</div>
-			<label id = "infection_radius_label">Infection Radius: 5</label>
+			<label id="infection_radius_label">Infection Radius: 5</label>
 			<div class="slidecontainer">
 				<input type="range" min="0" max="10" value="5" class="slider" id="infection_radius">
 			</div>
-			<label id = "infection_prob_label">Infection Probability: 10%</label>
+			<label id="infection_prob_label">Infection Probability: 10%</label>
 			<div class="slidecontainer">
 				<input type="range" min="0" max="100" value="10" class="slider" id="infection_prob">
 			</div>
 
-			<label id = "transportation_rate_label">Transportation Rate: 5%</label>
+			<label id="transportation_rate_label">Transportation Rate: 5%</label>
 			<div class="slidecontainer">
 				<input type="range" min="0" max="100" value="10" class="slider" id="transportation_rate">
 			</div>
-			<button id = "simulate_btn">Test</button>
+			<button id="simulate_btn">Test</button>
 		</div>
 
-		<div id = "output_container">
+		<div id="output_container">
 			<label>Final Statistics</label>
-			<br/>
+			<br />
 			<label id="total_days">Total Days: 0 days</label>
-			<br/>
+			<br />
 			<label id="total_infected">Total Infected: 0/1000</label>
-			<br/>
+			<br />
 			<label id="percent_infected">Percent Infected: 0.0</label>
-			<br/>
+			<br />
 			<label id="death_count">Total Dead: 0</label>
 			<div id="chartContainer" style="height: 200px; width: 100%;"></div>
 		</div>
-	
+
 		<div id="overlay">
-			<h1 id = "loading">LOADING...</h1>
+			<h1 id="loading">LOADING...</h1>
 			<!-- <button id="startButton">Play</button> -->
 		</div>
 	</div>
-	<script src = "../canvasjs.min.js"></script>
+	<script src="../canvasjs.min.js"></script>
 	<script>
-
-		if($("#total_days").val()!="Total Days: 0 days")
-		{
-		var chart = new CanvasJS.Chart("chartContainer", {
-			animationEnabled: true,
-			theme: "dark2",
-			title:{
-				text: "Death Rate"
-			},
-			axisY:{
-				includeZero: false
-			},
-			data: [{        
-				type: "line",
-				indexLabelFontSize: 16,
-				dataPoints: [
-					{ y: 450 },
-					{ y: 414 },
-					{ y: 520 },
-					{ y: 460 },
-					{ y: 450 },
-					{ y: 500 },
-					{ y: 480 },
-					{ y: 480 },
-					{ y: 410 },
-					{ y: 500 },
-					{ y: 480 },
-					{ y: 510 }
-				]
-			}]
-		});
-		chart.render();
+		if ($("#total_days").val() != "Total Days: 0 days") {
+			var chart = new CanvasJS.Chart("chartContainer", {
+				animationEnabled: true,
+				theme: "dark2",
+				title: {
+					text: "Death Rate"
+				},
+				axisY: {
+					includeZero: false
+				},
+				data: [{
+					type: "line",
+					indexLabelFontSize: 16,
+					dataPoints: [{
+							y: 450
+						},
+						{
+							y: 414
+						},
+						{
+							y: 520
+						},
+						{
+							y: 460
+						},
+						{
+							y: 450
+						},
+						{
+							y: 500
+						},
+						{
+							y: 480
+						},
+						{
+							y: 480
+						},
+						{
+							y: 410
+						},
+						{
+							y: 500
+						},
+						{
+							y: 480
+						},
+						{
+							y: 510
+						}
+					]
+				}]
+			});
+			chart.render();
 		}
-	        
 	</script>
 	<script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
 		varying vec2 vUv;

@@ -1,5 +1,7 @@
 import * as THREE from '../build/three.module.js';
-import {createWorld} from './spread.js';
+import {
+    createWorld
+} from './spread.js';
 
 
 import {
@@ -28,9 +30,12 @@ const globeWidth = 2048 / 2;
 const globeHeight = 1024 / 2;
 var numberOfPoints = 1000;
 var radiusOfSphere = 1;
-var  positionData = [];
-var startButton = document.getElementById( 'simulate_btn' );
-startButton.addEventListener( 'click', function(){createWorld(positionData,ps,sds,sdr,irs,ips,trs)} );
+var positionData = [];
+var startButton = document.getElementById('simulate_btn');
+
+startButton.addEventListener('click', function () {
+    createWorld(positionData, ps, sds, sdr, irs, ips, trs)
+});
 var loaderPromise = new Promise(function (resolve, reject) {
     function loadDone(x) {
         console.log("loader successfully completed loading task");
@@ -49,7 +54,7 @@ then(function (response) {
     var startbtn = document.createElement("button");
     startbtn.id = "startButton";
     startbtn.innerHTML = "START";
-	startbtn.addEventListener( 'click', init );
+    startbtn.addEventListener('click', init);
     overlay.appendChild(startbtn);
 }, function (err) {
     console.log(err);
@@ -96,7 +101,7 @@ function getPixel(imagedata, x, y) {
 }
 
 function getCartesianPositions(howMany) {
-    
+
     // Create and array to store our vector3 point data
     var vectors = [];
 
@@ -119,11 +124,10 @@ function getCartesianPositions(howMany) {
         } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
         vectors.push(convertFlatCoordsToSphereCoords(x, y));
     }
-    
+
     return vectors;
 }
-export function generateValidVector()
-{
+export function generateValidVector() {
 
     var imagedata = getImageData(texture.image);
     do {
@@ -131,19 +135,20 @@ export function generateValidVector()
         var y = Math.floor(Math.random() * 830);
     } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
     return convertFlatCoordsToSphereCoords(x, y);
-    
-    
+
+
 }
 
 function init() {
 
-    var overlay = document.getElementById( 'overlay' );
-				overlay.remove();
+    var overlay = document.getElementById('overlay');
+    overlay.remove();
 
     var population_slider = document.getElementById("population");
     var population_label = document.getElementById("population_label");
     population_label.innerHTML = "Population: " + population_slider.value; // Display the default slider value
-    population_slider.oninput = function () {    ps = this.value;
+    population_slider.oninput = function () {
+        ps = this.value;
 
         population_label.innerHTML = "Population: " + this.value;
     } // Update the current slider value (each time you drag the slider handle)
@@ -153,25 +158,28 @@ function init() {
     var social_distance_slider = document.getElementById("social_distance");
     var social_distance_label = document.getElementById("social_distance_label");
     social_distance_label.innerHTML = "Social Distance: " + social_distance_slider.value; // Display the default slider value
-    social_distance_slider.oninput = function () { sds = this.value;
+    social_distance_slider.oninput = function () {
+        sds = this.value;
 
         social_distance_label.innerHTML = "Social Distance: " + this.value;
     } // Update the current slider value (each time you drag the slider handle)
     sds = social_distance_slider.value;
-   
+
     var social_distance_rate_slider = document.getElementById("social_distance_rate");
     var social_distance_rate_label = document.getElementById("social_distance_rate_label");
     social_distance_rate_label.innerHTML = "Social Distance Participation Rate: " + social_distance_rate_slider.value + "%"; // Display the default slider value
-    social_distance_rate_slider.oninput = function () { sdr = this.value;
+    social_distance_rate_slider.oninput = function () {
+        sdr = this.value;
         social_distance_rate_label.innerHTML = "Social Distance Participation Rate: " + this.value + "%";
     } // Update the current slider value (each time you drag the slider handle)
-   sdr = social_distance_rate_slider.value;
+    sdr = social_distance_rate_slider.value;
 
 
     var infection_radius_slider = document.getElementById("infection_radius");
     var infection_radius_label = document.getElementById("infection_radius_label");
     infection_radius_label.innerHTML = "Infection Radius: " + infection_radius_slider.value; // Display the default slider value
-    infection_radius_slider.oninput = function () {    irs = this.value;
+    infection_radius_slider.oninput = function () {
+        irs = this.value;
 
         infection_radius_label.innerHTML = "Infection Radius: " + this.value;
     } // Update the current slider value (each time you drag the slider handle)
@@ -180,7 +188,8 @@ function init() {
     var infection_prob_slider = document.getElementById("infection_prob");
     var infection_prob_label = document.getElementById("infection_prob_label");
     infection_prob_label.innerHTML = "Infection Probability: " + infection_prob_slider.value + "%"; // Display the default slider value
-    infection_prob_slider.oninput = function () {    ips = this.value;
+    infection_prob_slider.oninput = function () {
+        ips = this.value;
 
         infection_prob_label.innerHTML = "Infection Probability: " + this.value + "%";
     } // Update the current slider value (each time you drag the slider handle)
@@ -189,11 +198,12 @@ function init() {
     var transportation_rate_slider = document.getElementById("transportation_rate");
     var transportation_rate_label = document.getElementById("transportation_rate_label");
     transportation_rate_label.innerHTML = "Transportation Rate: " + transportation_rate.value + "%"; // Display the default slider value
-    transportation_rate_slider.oninput = function () {    trs = this.value;
+    transportation_rate_slider.oninput = function () {
+        trs = this.value;
 
         transportation_rate_label.innerHTML = "Transportation Rate: " + this.value + "%";
     } // Update the current slider value (each time you drag the slider handle)
-    trs=transportation_rate_slider.value;
+    trs = transportation_rate_slider.value;
 
 
 
@@ -228,12 +238,15 @@ function init() {
     var light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
     camera.position.z = 5;
     controls.update();
     scene.add(globe);
@@ -272,12 +285,12 @@ function init() {
     var sound = new THREE.Audio(listener);
     var audioLoader = new THREE.AudioLoader();
     audioLoader.load('textures/bensound-slowmotion.ogg', //from ben-sound.com
-    function(buffer){
-        sound.setBuffer(buffer);
-        sound.setLoop(true);
-        sound.setVolume(0.5);
-        sound.play();
-    });
+        function (buffer) {
+            sound.setBuffer(buffer);
+            sound.setLoop(true);
+            sound.setVolume(0.5);
+            sound.play();
+        });
 
     animate();
 }
@@ -310,5 +323,5 @@ function animate() {
 function update() {}
 
 function render() {
-   renderer.render(scene, camera);
+    renderer.render(scene, camera);
 }

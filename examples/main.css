@@ -38,10 +38,14 @@ canvas {
 	-ms-user-select: none;
 	user-select: none;
 	pointer-events: none;
-	z-index: 1; /* TODO Solve this in HTML */
+	z-index: 1;
+	/* TODO Solve this in HTML */
 }
 
-a, button, input, select {
+a,
+button,
+input,
+select {
 	pointer-events: auto;
 }
 
@@ -50,7 +54,8 @@ a, button, input, select {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	z-index: 2 !important; /* TODO Solve this in HTML */
+	z-index: 2 !important;
+	/* TODO Solve this in HTML */
 }
 
 #overlay {
@@ -63,22 +68,22 @@ a, button, input, select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(0,0,0);
+	background: rgba(0, 0, 0);
 }
 
-	#overlay button {
-		background: #ffffff;
-		border: 0;
-		color: #000000;
-		padding: 16px 20px;
-		text-transform: uppercase;
-		cursor: pointer;
-	}
+#overlay button {
+	background: #ffffff;
+	border: 0;
+	color: #000000;
+	padding: 16px 20px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
 
-	#overlay h1{
-		color:white;
-		text-align: center;
-	}
+#overlay h1 {
+	color: white;
+	text-align: center;
+}
 
 #notSupported {
 	width: 50%;
@@ -88,7 +93,7 @@ a, button, input, select {
 	padding: 10px;
 }
 
-#dashboard{
+#dashboard {
 	position: absolute;
 	z-index: 2;
 	top: 0;
@@ -98,11 +103,12 @@ a, button, input, select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	pointer-events: none;
 }
 
-#input_container{
-	top:0;
-	left:0;
+#input_container {
+	top: 0;
+	left: 0;
 	margin: 20px;
 	width: 15%;
 	height: auto;
@@ -114,73 +120,92 @@ a, button, input, select {
 	float: left;
 }
 
-#output_container{
+#output_container {
 	right: 0;
-	top:0;
+	top: 0;
 	margin: 20px;
 	width: 25%;
 	height: auto;
 	overflow: auto;
-	background-color: rgba(255, 0, 106, 0.425);/*rgba(255, 0, 13, 0.233);*/
+	background-color: rgba(255, 0, 106, 0.425);
+	/*rgba(255, 0, 13, 0.233);*/
 	position: absolute;
 	z-index: 1;
 	padding: 10px;
 	float: right;
 }
 
-#simulate_btn{
+#simulate_btn {
 	border-radius: 8px;
 	padding: 4px 14px;
 	background-color: #f4433654;
-	border:0;
-	outline:none;
+	border: 0;
+	outline: none;
 }
 
-#simulate_btn:hover{
+#simulate_btn:hover {
 	border-radius: 8px;
 	padding: 4px 14px;
 	background-color: #f44336cb;
-	border:0;
-	outline:none;
+	border: 0;
+	outline: none;
 }
 
 
 /*SLIDER from W3Schools*/
 .slidecontainer {
-	width: 100%; /* Width of the outside container */
-  }
-  
-  /* The slider itself */
-  .slider {
-	-webkit-appearance: none;  /* Override default CSS styles */
+	width: 100%;
+	/* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+	-webkit-appearance: none;
+	/* Override default CSS styles */
 	appearance: none;
-	width: 100%; /* Full-width */
-	height: 25px; /* Specified height */
-	background: #d3d3d3; /* Grey background */
-	outline: none; /* Remove outline */
-	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	width: 100%;
+	/* Full-width */
+	height: 25px;
+	/* Specified height */
+	background: #d3d3d3;
+	/* Grey background */
+	outline: none;
+	/* Remove outline */
+	opacity: 0.7;
+	/* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s;
+	/* 0.2 seconds transition on hover */
 	transition: opacity .2s;
-  }
-  
-  /* Mouse-over effects */
-  .slider:hover {
-	opacity: 1; /* Fully shown on mouse-over */
-  }
-  
-  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-  .slider::-webkit-slider-thumb {
-	-webkit-appearance: none; /* Override default look */
+}
+
+/* Mouse-over effects */
+.slider:hover {
+	opacity: 1;
+	/* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	/* Override default look */
 	appearance: none;
-	width: 25px; /* Set a specific slider handle width */
-	height: 25px; /* Slider handle height */
-	background: #4CAF50; /* Green background */
-	cursor: pointer; /* Cursor on hover */
-  }
-  
-  .slider::-moz-range-thumb {
-	width: 25px; /* Set a specific slider handle width */
-	height: 25px; /* Slider handle height */
-	background: #4CAF50; /* Green background */
-	cursor: pointer; /* Cursor on hover */
-  }
+	width: 25px;
+	/* Set a specific slider handle width */
+	height: 25px;
+	/* Slider handle height */
+	background: #4CAF50;
+	/* Green background */
+	cursor: pointer;
+	/* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+	width: 25px;
+	/* Set a specific slider handle width */
+	height: 25px;
+	/* Slider handle height */
+	background: #4CAF50;
+	/* Green background */
+	cursor: pointer;
+	/* Cursor on hover */
+}
