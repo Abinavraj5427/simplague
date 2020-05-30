@@ -72,8 +72,6 @@ function init() {
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     window.addEventListener('resize', onWindowResize, false);
-
-
 }
 
 function onWindowResize() {
