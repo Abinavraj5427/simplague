@@ -188,7 +188,7 @@ function init() {
     var light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
@@ -201,6 +201,43 @@ function init() {
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     window.addEventListener('resize', onWindowResize, false);
+
+    // A SKYBOX FOR A UNIVERSE
+    // controls.addEventListener('change', renderer);
+    // controls.minDistance = 500;
+    // controls.maxDistance = 1500;
+    let materialArray = [];
+    let texture_ft = new THREE.TGALoader().load('textures/galaxy+Z.tga');
+    let texture_bk = new THREE.TGALoader().load('textures/galaxy-Z.tga');
+    let texture_up = new THREE.TGALoader().load('textures/galaxy+Y.tga');
+    let texture_dn = new THREE.TGALoader().load('textures/galaxy-Y.tga');
+    let texture_lf = new THREE.TGALoader().load('textures/galaxy-X.tga');
+    let texture_rt = new THREE.TGALoader().load('textures/galaxy+X.tga');
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
+    materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
+    for(let i = 0; i<6;i++){
+        materialArray[i].side = THREE.BackSide;
+    }
+    let skyboxGeo = new THREE.BoxGeometry(10000,10000, 10000);
+    let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+    scene.add(skybox); 
+
+    //AUDIO
+    var listener = new THREE.AudioListener();
+    camera.add(listener);
+    var sound = new THREE.Audio(listener);
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load('textures/bensound-slowmotion.ogg', //from ben-sound.com
+    function(buffer){
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(0.5);
+        sound.play();
+    });
 }
 
 function onWindowResize() {
@@ -231,5 +268,5 @@ function animate() {
 function update() {}
 
 function render() {
-    renderer.render(scene, camera);
+   //renderer.render(scene, camera);
 }
