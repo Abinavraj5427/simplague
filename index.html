@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>three.js webgl - materials - video</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="main.css">
+</head>
+
+<body>
+	<div id="container"></div>
+
+
+	<script id="vertexShader" type="x-shader/x-vertex">
+		varying vec2 vUv;
+	
+		void main() {
+			vUv = uv;
+	
+			gl_Position =   projectionMatrix * 
+							modelViewMatrix * 
+							vec4(position,1.0);
+		}
+	</script>
+
+	<script id="fragmentShader" type="x-shader/x-fragment">
+		uniform sampler2D texture1;
+	
+		varying vec2 vUv;
+	
+		void main() {
+			gl_FragColor = texture2D(texture1, vUv); 
+			//if(gl_FragCoord.y>0.2){
+			//	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); 
+			//}
+		}
+	</script>
+	<script type="module" src="index.js"></script>
+
+</body>
+
+</html>
