@@ -1,4 +1,5 @@
 import {generateValidVector} from './index.js';
+import * as THREE from '../build/three.module.js';
 
 var everyone = [];
 var people = [];
@@ -173,15 +174,15 @@ function spreadAgain()
             }
         }
         var col;
-        if(people[a].dead==true)
-            col = THREE.Vector3(0,0,0);//white
-        else if(infected)
-            col = THREE.Vector3(1,0,0);//red
+        if(p.dead==true)
+            col = 0XFFFFFF//white
+        else if(p.infected)
+            col = 0XFF0000;//red
         else
-            col = THREE.Vector3(1,1,1)//black
+            col = 0X000000//black
         
         everyone.push({
-            position: THREE.Vector3(people[a].xpos,people[a].ypos,people[a].zpos),
+            position: new THREE.Vector3(people[a].xpos,people[a].ypos,people[a].zpos),
             color: col
         });
     }
@@ -190,6 +191,7 @@ function spreadAgain()
         recalibrate(updatedPeople2);
     }
     totalDeathsOverTime.push(deadPeople.length);
+    console.log(everyone);
     return everyone;
 }
 
