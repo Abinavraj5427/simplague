@@ -1,4 +1,5 @@
 import * as THREE from '../build/three.module.js';
+import {createWorld, spreadAgain, show, totalInfected} from './spread.js';
 
 
 import {
@@ -35,6 +36,12 @@ loaderPromise.
 then(function (response) {
     texture = response;
     positionData = getCartesianPositions(numberOfPoints, radiusOfSphere);
+    createWorld(positionData);
+    for(var q=0;q<50;q++)
+    {
+        spreadAgain();
+        show();
+    }
     init();
     animate();
 
@@ -82,7 +89,8 @@ function getPixel(imagedata, x, y) {
 
 }
 
-function getCartesianPositions(howMany, radius) {
+function getCartesianPositions(howMany) {
+    
     // Create and array to store our vector3 point data
     var vectors = [];
 
@@ -105,8 +113,20 @@ function getCartesianPositions(howMany, radius) {
         } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
         vectors.push(convertFlatCoordsToSphereCoords(x, y));
     }
-
+    
     return vectors;
+}
+export function generateValidVector()
+{
+
+    var imagedata = getImageData(texture.image);
+    do {
+        var x = Math.floor(Math.random() * 2048);
+        var y = Math.floor(Math.random() * 830);
+    } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
+    return convertFlatCoordsToSphereCoords(x, y);
+    
+    
 }
 
 function init() {

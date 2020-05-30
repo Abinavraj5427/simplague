@@ -1,37 +1,37 @@
-//import * as THREE from '../build/three.module.js';
+import * as THREE from '../build/three.module.js';
+import {generateValidVector} from './index.js';
+
 
 var people = [];
 var deadPeople = [];
-var population = 1000;
+//var population = 1000;
 var socialDistancing = .05;
 var socialDistancingParticipationRate = .5;
-var infectionRadius = .05;//if in radius, then in adjacency list
+var infectionRadius = .1;//if in radius, then in adjacency list
 var infectionProbability = .1;
-var initialProbability = .01;
-var transportationRate = .1;
+var initialProbability = .005;
+var transportationRate = .05;
 var deathChance = .05;
-init();
-for(var q=0;q<100;q++)
+//createWorld();
+
+export function createWorld(positionData) 
 {
-    spreadAgain();
-    show();
-    if(totalInfected()==population)
-    break;
-}
-function init() 
-{
-    for(var i=0;i<population;i++)
+    for(var i=0;i<positionData.length;i++)
     {
-        var x = Math.random();
-        var y = Math.random();
-        var z = Math.random();
-        var magnitude = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
-        x = x/magnitude;
-        y = y/magnitude;
-        z = z/magnitude;
+        var x = positionData[i].x;
+        var y = positionData[i].y;
+        var z = positionData[i].z;
+        // var x = Math.random();
+        // var y = Math.random();
+        // var z = Math.random();
+        //var magnitude = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
+        // x = x/magnitude;
+        // y = y/magnitude;
+        // z = z/magnitude;
+        console.log(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)));
         
         var p = new Person(x,y,z,Math.random()<=initialProbability);
-
+            
         for(var a=0;a<people.length;a++)
         {
             var px = people[a].xpos;
@@ -54,18 +54,15 @@ function init()
         }
         people.push(p);
     }
-    // for(var a=0;a<people.length;a++)
-    // {
-    //     console.log(people[a].adjacentPeople.length);
-    // }
+
     console.log(totalInfected());
 }
-function show()
+export function show()
 {
     console.log("infected "+totalInfected());
     console.log("dead "+totalDead())
 }
-function totalInfected()
+export function totalInfected()
 {
     var t = 0;
     for(var a=0;a<people.length;a++)
@@ -73,7 +70,7 @@ function totalInfected()
             t++;
     return t;
 }
-function totalDead()
+export function totalDead()
 {
     var t = 0;
     for(var a=0;a<people.length;a++)
@@ -82,7 +79,7 @@ function totalDead()
     return t;
 }
 
-function spreadAgain()
+export function spreadAgain()
 {
     var updatedPeople = [];
     var updatedPeople2 = [];
@@ -103,14 +100,15 @@ function spreadAgain()
         {
             if(Math.random()<=transportationRate)
             {
-                var newx = Math.random();
-                var newy = Math.random();
-                var newz = Math.random();
-                var magnitude = Math.sqrt(Math.pow(newx,2)+Math.pow(newy,2)+Math.pow(newz,2));
-                newx = newx/magnitude;
-                newy = newy/magnitude;
-                newz = newz/magnitude;
-    //            updatedPeople.push(new THREE.Vector3(newx, newy, newz));
+                var vector = generateValidVector();
+                var newx = vector.x;
+                var newy = vector.y;
+                var newz = vector.z;
+                // var magnitude = Math.sqrt(Math.pow(newx,2)+Math.pow(newy,2)+Math.pow(newz,2));
+                // newx = newx/magnitude;
+                // newy = newy/magnitude;
+                // newz = newz/magnitude;
+                updatedPeople.push(vector);
                 p.xpos = newx;
                 p.ypos = newy;
                 p.zpos = newz;
@@ -144,18 +142,18 @@ function recalibrate(updatedPeople2)
     for(var a=0;a<updatedPeople2.length;a++)
     {
         var adj = updatedPeople2[a].adjacentPeople;
-        for(var d=0;d<adj.length;d++)
-        {
-            adj2 = adj[d].adjacentPeople;
-            for(var dd=0;dd<adj2.length;dd++)
-            {
-                if(adj2[dd]==updatedPeople2[a])
-                {
-                    adj2.splice(dd,1);
-                    break;
-                }
-            }
-        }
+        // for(var d=0;d<adj.length;d++)
+        // {
+        //     var adj2 = adj[d].adjacentPeople;
+        //     for(var dd=0;dd<adj2.length;dd++)
+        //     {
+        //         if(adj2[dd]==updatedPeople2[a])
+        //         {
+        //             adj2.splice(dd,1);
+        //             break;
+        //         }
+        //     }
+        // }
         updatedPeople2[a].adjacentPeople = [];
 
         for(var i=0;i<people.length;i++)
