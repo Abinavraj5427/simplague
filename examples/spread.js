@@ -1,12 +1,16 @@
 var people = [];
-var population = 100;
-var socialDistancing = .02;
-var socialDistancingParticipationRate = .7;
-var infectionRadius = .1;//if in radius, then in adjacency list
-var infectionProbability = .6;
+var population = 1000;
+var socialDistancing = .1;
+var socialDistancingParticipationRate = .5;
+var infectionRadius = .3;//if in radius, then in adjacency list
+var infectionProbability = .01;
 var transportationRate = .02;
 init();
-
+for(var q=0;q<10;q++)
+{
+    spreadAgain();
+    show();
+}
 function init() 
 {
     for(var i=0;i<population;i++)
@@ -14,7 +18,8 @@ function init()
         var x = Math.random();
         var y = Math.random();
         var z = Math.random();
-        var p = new Person(x,y,z,false);
+
+        var p = new Person(x,y,z,Math.random()<infectionProbability);
 
         for(var a=0;a<people.length;a++)
         {
@@ -23,13 +28,14 @@ function init()
             var pz = people[a].zpos;
             var dist = distance(x,y,z,px,py,pz);
             var participating = Math.random()<socialDistancingParticipationRate;
+            
 
             if(participating && dist+socialDistancing<=infectionRadius)
             {
                 p.adjacentPeople.push(people[a]);
                 people[a].adjacentPeople.push(p);
             }
-            else if(dist<=infectionRadius)
+            else if(participating==false && dist<=infectionRadius)
             {
                 p.adjacentPeople.push(people[a]);
                 people[a].adjacentPeople.push(p);
@@ -37,15 +43,30 @@ function init()
         }
         people.push(p);
     }
+    // for(var a=0;a<people.length;a++)
+    // {
+    //     console.log(people[a].adjacentPeople.length);
+    // }
+    console.log(totalInfected());
+}
+function show()
+{
+    console.log(totalInfected());
+}
+function totalInfected()
+{
+    var t = 0;
     for(var a=0;a<people.length;a++)
-    {
-        console.log(people[a].adjacentPeople.length);
-    }
+        if(people[a].infected==true)
+            t++;
+    return t;
 }
 //give an array of each persons old position and new position
 function spreadAgain()
 {
     var updatedPeople = [];
+    var updatedPeople2 = [];
+
     for(var a=0;a<people.length;a++)
     {
         var p = people[a];
@@ -58,22 +79,25 @@ function spreadAgain()
             newx = newx/magnitude;
             newy = newy/magnitude;
             newz = newz/magnitude;
-            pos.push(new pos(p.xpos,p.ypos,p.zpos,newx,newy,newz));
+            updatedPeople.push(new pos(p.xpos,p.ypos,p.zpos,newx,newy,newz));
             p.xpos = newx;
             p.ypos = newy;
             p.zpos = newz;
+            updatedPeople2.push(p);
         }
         else
         {
             var adj = p.adjacentPeople;
 
+            if(p.infected==false)
+                continue;
             for(var aa=0;aa<adj.length;aa++)
             {
                 if(a!=aa)
                 {
                     var pp = adj[aa];
 
-                    if(p.infected==true && Math.random()<infectionProbability)
+                    if(Math.random()<infectionProbability)
                     {
                         pp.infected = true;
                     }
@@ -83,45 +107,37 @@ function spreadAgain()
     }
     if(updatedPeople.length>0)
     {
-        clearAdjacents();
-        recalibrate();
+        recalibrate(updatedPeople2);
     }
     return updatedPeople;
 }
 
-function clearAdjacents()
+function recalibrate(updatedPeople2)
 {
-    for(var i=0;i<people.length;i++)
+    for(var a=0;a<updatedPeople2.length;a++)
     {
-        people[i].adjacentPeople = [];
-    }
-}
-function recalibrate()
-{
-    for(var i=0;i<people.length;i++)
-    {
-        var p = people[i];
-        var x = p.xpos;
-        var y = p.ypos;
-        var z = p.zpos;
-
-        for(var a=0;a<people.length;a++)
+        var adj = updatedPeople2[a].adjacentPeople;
+        for(var d=0;d<adj.length;d++)
         {
-            var px = people[a].xpos;
-            var py = people[a].ypos;
-            var pz = people[a].zpos;
-            var dist = distance(x,y,z,px,py,pz);
+            adj[d].adjacentPeople.pop(updatedPeople2[a]);
+        }
+        updatedPeople2[a].adjacentPeople = [];
+
+        for(var i=0;i<people.length;i++)
+        {
+            var p = people[i];
+            var dist = distance(updatedPeople2[a].xpos,updatedPeople2[a].ypos,updatedPeople2[a].zpos,p.xpos,p.ypos,p.zpos);
             var participating = Math.random()<socialDistancingParticipationRate;
 
             if(participating && dist+socialDistancing<=infectionRadius)
             {
-                p.adjacentPeople.push(people[a]);
-                people[a].adjacentPeople.push(p);
+                p.adjacentPeople.push(updatedPeople2[a]);
+                updatedPeople2[a].adjacentPeople.push(p);
             }
-            else if(dist<=infectionRadius)
+            else if(participating==false && dist<=infectionRadius)
             {
-                p.adjacentPeople.push(people[a]);
-                people[a].adjacentPeople.push(p);
+                p.adjacentPeople.push(updatedPeople2[a]);
+                updatedPeople2[a].adjacentPeople.push(p);
             }
         }
     }
@@ -150,3 +166,4 @@ function pos(oldxpos,oldypos,oldzpos,newxpos,newypos,newzpos)
     this.newypos = newypos;
     this.newzpos = newzpos;
 }
+
