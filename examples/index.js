@@ -27,9 +27,9 @@ var material = new THREE.ShaderMaterial({
         }
     },
 
-    vertexShader: document.getElementById('vertexShader').innerHTML,
+    vertexShader: document.getElementById('vertexShader').text,
 
-    fragmentShader: document.getElementById('fragmentShader').innerHTML
+    fragmentShader: document.getElementById('fragmentShader').text
 
 });
 var geometry = new THREE.SphereGeometry(1, 128, 128);

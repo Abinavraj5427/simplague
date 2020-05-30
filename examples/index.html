@@ -12,28 +12,27 @@
 	<div id="container"></div>
 
 
-	<script id="vertexShader" type="x-shader/x-vertex">
+	<script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
 		varying vec2 vUv;
-	
+		varying vec4 worldPos;
 		void main() {
 			vUv = uv;
-	
+		
 			gl_Position =   projectionMatrix * 
 							modelViewMatrix * 
 							vec4(position,1.0);
+			worldPos = modelMatrix * vec4(position, 1.0);
 		}
 	</script>
 
-	<script id="fragmentShader" type="x-shader/x-fragment">
+	<script id="fragmentShader" type="x-shader/x-fragment" src="fragment.frag">
 		uniform sampler2D texture1;
 	
 		varying vec2 vUv;
-	
+		varying vec4 worldPos;
 		void main() {
 			gl_FragColor = texture2D(texture1, vUv); 
-			//if(gl_FragCoord.y>0.2){
-			//	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); 
-			//}
+			
 		}
 	</script>
 	<script type="module" src="index.js"></script>
