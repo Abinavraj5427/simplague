@@ -41,8 +41,6 @@ export function createWorld(positionData, ps, sds, sdr, irs, ips, trs) {
     $("#total_infected").html("Total Infected: " + totalInfectedPeople + "/" + (people.length));
     $("#percent_infected").html("Percent Infected: " + (totalInfectedPeople / (people.length) * 100) + "%");
     $("#death_count").html("Total Dead: " + (totalDeadPeople));
-    console.log(positionData);
-    console.log(ps + " " + sds + " " + sdr);
     for (var i = 0; i < positionData.length; i++) {
         var x = positionData[i].position.x;
         var y = positionData[i].position.y;
@@ -79,7 +77,6 @@ export function createWorld(positionData, ps, sds, sdr, irs, ips, trs) {
         }
         people.push(p);
     }
-    console.log(people);
     // console.log(totalInfected());
     // for (var a = 0; a < 10; a++) {
     //     spreadAgain();
@@ -164,11 +161,11 @@ export function spreadAgain() {
         }
         var col;
         if (p.dead == true)
-            col = 0x000000; //white
+            col = 0x000000; //black
         else if (p.infected)
             col = 0XFF0000; //red
         else
-            col = 0XFFFFFF //black
+            col = 0XFFFFFF //white
 
         everyone.push({
             position: new THREE.Vector3(people[a].xpos, people[a].ypos, people[a].zpos),

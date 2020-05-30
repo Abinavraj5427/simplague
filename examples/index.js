@@ -20,7 +20,7 @@ var mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var ps;
+var ps = 1000;
 var sds;
 var sdr;
 var irs;
@@ -30,7 +30,6 @@ var trs;
 const globeRadius = 1;
 const globeWidth = 2048 / 2;
 const globeHeight = 1024 / 2;
-var numberOfPoints = 1000;
 var radiusOfSphere = 1;
 var positionData = [];
 var startButton = document.getElementById('simulate_btn');
@@ -61,7 +60,7 @@ loaderPromise.
 then(function (response) {
     scene = new THREE.Scene();
     texture = response;
-    positionData = createPeople(numberOfPoints, radiusOfSphere);
+    positionData = createPeople(ps, radiusOfSphere);
     document.getElementById("loading").remove();
     var overlay = document.getElementById("overlay");
     var startbtn = document.createElement("button");
@@ -149,7 +148,7 @@ function createPeople(howMany) {
 }
 
 function updatePeople() {
-    for (var i = 0; i < numberOfPoints; i++) {
+    for (var i = 0; i < ps; i++) {
         spheres[i].position.set(positionData[i].position.x, positionData[i].position.y, positionData[i].position.z);
         spheres[i].material.color.setHex(positionData[i].color);
     }
@@ -169,15 +168,15 @@ function init() {
     var overlay = document.getElementById('overlay');
     overlay.remove();
 
-    var population_slider = document.getElementById("population");
-    var population_label = document.getElementById("population_label");
-    population_label.innerHTML = "Population: " + population_slider.value; // Display the default slider value
-    population_slider.oninput = function () {
-        ps = this.value;
+    // var population_slider = document.getElementById("population");
+    // var population_label = document.getElementById("population_label");
+    // population_label.innerHTML = "Population: " + population_slider.value; // Display the default slider value
+    // population_slider.oninput = function () {
+    //     ps = this.value;
 
-        population_label.innerHTML = "Population: " + this.value;
-    } // Update the current slider value (each time you drag the slider handle)
-    ps = population_slider.value;
+    //     population_label.innerHTML = "Population: " + this.value;
+    // } // Update the current slider value (each time you drag the slider handle)
+    // ps = population_slider.value;
 
 
     var social_distance_slider = document.getElementById("social_distance");
@@ -319,7 +318,10 @@ function init() {
             sound.setVolume(0.5);
             sound.play();
         });
+    createWorld(positionData, ps, sds, sdr, irs, ips, trs)
+    positionData = spreadAgain();
 
+    updatePeople();
     animate();
 }
 
