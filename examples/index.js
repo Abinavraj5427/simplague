@@ -14,6 +14,18 @@ var mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+let numSubjects = 5;
+
+var numberOfPoints = 7000;
+var radiusOfSphere = 1;
+
+var positionData = getCartesianPositions(numberOfPoints, radiusOfSphere);
+
+// Convert out positionData into a float32Array for handing to the buffer geometry
+const positions = new Float32Array(positionData.length * 3);
+positionData.forEach(function(vert, vertIndex) {
+	vert.toArray(positions, vertIndex * 3);
+}, this);
 
 var population_slider = document.getElementById("population");
 var population_label = document.getElementById("population_label");
@@ -47,14 +59,24 @@ transportation_rate_slider.oninput = function() {transportation_rate_label.inner
 
 
 // immediately use the texture for material creation
+
+var subjectPos = [];
+var i;
+for (i = 0; i < numSubjects; i++) {
+    var vector = (new THREE.Vector3(1.0, i, 0.0)).normalize();
+    subjectPos.push(vector);
+}
+console.log(subjectPos);
+
 var material = new THREE.ShaderMaterial({
 
     uniforms: {
-
-
         texture1: {
             type: "t",
-            value: THREE.ImageUtils.loadTexture('ojwD8.jpg')
+            value: new THREE.TextureLoader().load('ojwD8.jpg')
+        },
+        subjects: {
+            value: subjectPos
         }
     },
 
@@ -64,12 +86,33 @@ var material = new THREE.ShaderMaterial({
 
 });
 var geometry = new THREE.SphereGeometry(1, 128, 128);
-var cube = new THREE.Mesh(geometry, material);
+var globe = new THREE.Mesh(geometry, material);
 var controls;
 
 
 init();
 animate();
+
+function getCartesianPositions(howMany, radius) {
+	// Create and array to store our vector3 point data
+	var vectors = [];
+
+	// Create new points using random x,y and z properties then setting vector length to radius
+
+	for (var i = 0; i < howMany; i += 1) {
+		var vec3 = new THREE.Vector3();
+
+		vec3.x = THREE.Math.randFloatSpread(1);
+		vec3.y = THREE.Math.randFloatSpread(1);
+		vec3.z = THREE.Math.randFloatSpread(1);
+
+		vec3.setLength(radius);
+
+		vectors.push(vec3);
+	}
+
+	return vectors;
+}
 
 function init() {
     container = document.createElement('div');
@@ -90,11 +133,13 @@ function init() {
     controls = new OrbitControls(camera, renderer.domElement);
     camera.position.z = 5;
     controls.update();
-    scene.add(cube);
+    scene.add(globe);
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     window.addEventListener('resize', onWindowResize, false);
+
+
 }
 
 function onWindowResize() {
@@ -114,7 +159,6 @@ function onDocumentMouseMove(event) {
     mouseY = (event.clientY - windowHalfY) * 0.3;
 }
 
-//
 
 function animate() {
     requestAnimationFrame(animate);
@@ -123,9 +167,7 @@ function animate() {
     render();
 }
 
-function update() {
-    cube.rotation.y += 0.001;
-}
+function update() {}
 
 function render() {
     renderer.render(scene, camera);
