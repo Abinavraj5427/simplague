@@ -132,5 +132,8 @@
     "test-unit": "npm run unit --prefix test"
   },
   "types": "src/Three.d.ts",
-  "version": "0.117.1"
+  "version": "0.117.1",
+  "dependencies": {
+    "chart.js": "^2.9.3"
+  }
 }
