@@ -9,7 +9,37 @@
 </head>
 
 <body>
-	<div id="container"></div>
+	<div id="input_container">
+		<label>Simulate</label>
+		<br/>
+		<label id = "population_label">Population: 3500</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="7000" value="3500" class="slider" id="population">
+		</div>
+		<label id = "social_distance_label">Social Distancing: 50</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="100" value="50" class="slider" id="social_distance">
+		</div>
+		<label id = "social_distance_rate_label">Social Distancing Participation Rate: 50%</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="100" value="50" class="slider" id="social_distance_rate">
+		</div>
+		<label id = "infection_radius_label">Infection Radius: 50</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="16" value="8" class="slider" id="infection_radius">
+		</div>
+		<label id = "infection_prob_label">Infection Probability: 50%</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="100" value="50" class="slider" id="infection_prob">
+		</div>
+
+		<label id = "transportation_rate_label">Transprotation Rate: 50%</label>
+		<div class="slidecontainer">
+			<input type="range" min="1" max="100" value="50" class="slider" id="transportation_rate">
+		</div>
+		<button id = "simulate_btn">Test</button>
+	</div>
+	
 
 
 	<script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
