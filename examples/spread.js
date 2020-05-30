@@ -2,6 +2,7 @@ import {
     generateValidVector
 } from './index.js';
 
+
 import * as THREE from '../build/three.module.js';
 
 var everyone = [];
@@ -40,11 +41,12 @@ export function createWorld(positionData, ps, sds, sdr, irs, ips, trs) {
     $("#total_infected").html("Total Infected: " + totalInfectedPeople + "/" + (people.length));
     $("#percent_infected").html("Percent Infected: " + (totalInfectedPeople / (people.length) * 100) + "%");
     $("#death_count").html("Total Dead: " + (totalDeadPeople));
-
+    console.log(positionData);
+    console.log(ps + " " + sds + " " + sdr);
     for (var i = 0; i < positionData.length; i++) {
-        var x = positionData[i].x;
-        var y = positionData[i].y;
-        var z = positionData[i].z;
+        var x = positionData[i].position.x;
+        var y = positionData[i].position.y;
+        var z = positionData[i].position.z;
         // var x = Math.random();
         // var y = Math.random();
         // var z = Math.random();
@@ -77,7 +79,7 @@ export function createWorld(positionData, ps, sds, sdr, irs, ips, trs) {
         }
         people.push(p);
     }
-
+    console.log(people);
     // console.log(totalInfected());
     // for (var a = 0; a < 10; a++) {
     //     spreadAgain();
@@ -116,6 +118,8 @@ export function spreadAgain() {
     //   var updatedPeople = [];
     var updatedPeople2 = [];
     everyone = [];
+
+    console.log(people);
 
     totalDays += 5;
     for (var a = 0; a < people.length; a++) {
@@ -160,11 +164,11 @@ export function spreadAgain() {
         }
         var col;
         if (p.dead == true)
-            col = new THREE.Vector3(0, 0, 0); //white
+            col = 0x000000; //white
         else if (p.infected)
-            col = new THREE.Vector3(1, 0, 0); //red
+            col = 0XFF0000; //red
         else
-            col = new THREE.Vector3(1, 1, 1) //black
+            col = 0XFFFFFF //black
 
         everyone.push({
             position: new THREE.Vector3(people[a].xpos, people[a].ypos, people[a].zpos),

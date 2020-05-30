@@ -30,7 +30,7 @@ var trs;
 const globeRadius = 1;
 const globeWidth = 2048 / 2;
 const globeHeight = 1024 / 2;
-var numberOfPoints = 100;
+var numberOfPoints = 1000;
 var radiusOfSphere = 1;
 var positionData = [];
 var startButton = document.getElementById('simulate_btn');
@@ -39,11 +39,13 @@ var spheres = [];
 
 startButton.addEventListener('click', function () {
     createWorld(positionData, ps, sds, sdr, irs, ips, trs)
+    positionData = spreadAgain();
+
+    updatePeople();
 });
 spreadbutton.addEventListener('click', function () {
-    console.log(positionData);
     positionData = spreadAgain();
-    console.log(positionData);
+
     updatePeople();
 });
 var loaderPromise = new Promise(function (resolve, reject) {
@@ -60,8 +62,6 @@ then(function (response) {
     scene = new THREE.Scene();
     texture = response;
     positionData = createPeople(numberOfPoints, radiusOfSphere);
-
-
     document.getElementById("loading").remove();
     var overlay = document.getElementById("overlay");
     var startbtn = document.createElement("button");
@@ -150,7 +150,8 @@ function createPeople(howMany) {
 
 function updatePeople() {
     for (var i = 0; i < numberOfPoints; i++) {
-        spheres[i].position.set(positionData[i].x, positionData[i].y, positionData[i].z);
+        spheres[i].position.set(positionData[i].position.x, positionData[i].position.y, positionData[i].position.z);
+        spheres[i].material.color.setHex(positionData[i].color);
     }
 }
 
@@ -229,8 +230,6 @@ function init() {
     } // Update the current slider value (each time you drag the slider handle)
     trs = transportation_rate_slider.value;
 
-    createWorld(positionData, ps, sds, sdr, irs, ips, trs);
-
     // var material = new THREE.ShaderMaterial({
 
     //     uniforms: {
@@ -248,6 +247,8 @@ function init() {
     //     fragmentShader: document.getElementById('fragmentShader').text
 
     // });
+
+
     var material = new THREE.MeshBasicMaterial({
         map: texture
     });
