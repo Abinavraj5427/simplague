@@ -3,6 +3,9 @@ import {generateValidVector} from './index.js';
 
 var people = [];
 var deadPeople = [];
+var totalInfectedPeople=0;
+var totalDeadPeople = 0;
+var totalDeathsOverTime = [];
 var population = 1;
 var socialDistancing = 0;
 var socialDistancingParticipationRate = 0;
@@ -11,12 +14,18 @@ var infectionProbability = 0;
 var initialProbability = .02;
 var transportationRate = 0;
 var deathChance = .03;
+var totalDays = 0;
 //createWorld();
 
 export function createWorld(positionData, ps,sds,sdr,irs,ips,trs) 
 {
+    totalDays=0;
     people=[];
     deadPeople=[];
+    totalDeathsOverTime = [];
+    totalDays=0;
+    totalInfectedPeople=0;
+    totalDeadPeople=0;
     population=ps;
     socialDistancing=sds/100;
     socialDistancingParticipationRate=sdr/100;
@@ -24,6 +33,11 @@ export function createWorld(positionData, ps,sds,sdr,irs,ips,trs)
     infectionProbability=ips/100;
     transportationRate=trs/100;
     console.log(population+" "+socialDistancing+" "+socialDistancingParticipationRate+" "+infectionRadius+" "+infectionProbability+" "+transportationRate);
+    $("#total_days").html("Total Days: " + totalDays + " days");
+    $("#total_infected").html("Total Infected: " + totalInfectedPeople + "/"+(people.length));
+    $("#percent_infected").html("Percent Infected: " +  (totalInfectedPeople/(people.length)*100) + "%");
+    $("#death_count").html("Total Dead: " + (totalDeadPeople));
+
     for(var i=0;i<positionData.length;i++)
     {
         var x = positionData[i].x;
@@ -37,8 +51,10 @@ export function createWorld(positionData, ps,sds,sdr,irs,ips,trs)
         // y = y/magnitude;
         // z = z/magnitude;
         //console.log(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)));
-        
-        var p = new Person(x,y,z,Math.random()<=initialProbability);
+        var infec = Math.random()<=initialProbability;
+        if(infec==true)
+            totalInfectedPeople++;
+        var p = new Person(x,y,z,infec);
             
         for(var a=0;a<people.length;a++)
         {
@@ -68,8 +84,25 @@ export function createWorld(positionData, ps,sds,sdr,irs,ips,trs)
     {
         spreadAgain();
         show();
+        sleep(2500);
+
+        $("#total_days").html("Total Days: " + totalDays + " days");
+        $("#total_infected").html("Total Infected: " + totalInfectedPeople + "/"+(people.length-totalDeadPeople));
+        $("#percent_infected").html("Percent Infected: " +  (totalInfectedPeople/(people.length-totalDeadPeople)*100) + "%");
+        $("#death_count").html("Total Dead: " + (totalDeadPeople));
     }
+    
 }
+
+function sleep(milliseconds) { 
+    let timeStart = new Date().getTime(); 
+    while (true) { 
+      let elapsedTime = new Date().getTime() - timeStart; 
+      if (elapsedTime > milliseconds) { 
+        break; 
+      } 
+    } 
+  } 
 function show()
 {
     console.log("infected "+totalInfected());
@@ -77,26 +110,18 @@ function show()
 }
 function totalInfected()
 {
-    var t = 0;
-    for(var a=0;a<people.length;a++)
-        if(people[a].infected==true && people[a].dead==false)
-            t++;
-    return t;
+    return totalInfectedPeople;
 }
 function totalDead()
 {
-    var t = 0;
-    for(var a=0;a<people.length;a++)
-        if(people[a].dead==true)
-            t++;
-    return t;
+    return totalDeadPeople;
 }
 
 function spreadAgain()
 {
     var updatedPeople = [];
     var updatedPeople2 = [];
-
+    totalDays+=5;
     for(var a=0;a<people.length;a++)
     {
         var p = people[a];
@@ -107,6 +132,8 @@ function spreadAgain()
             {
                 p.dead=true;
                 deadPeople.push(p);
+                totalDeadPeople++;
+                totalInfectedPeople--;
             }
         }
         if(p.dead==false && p.infected==true)
@@ -135,9 +162,10 @@ function spreadAgain()
                 if(a!=aa)
                 {
                     var pp = adj[aa];
-                    if(Math.random()<infectionProbability)
+                    if(Math.random()<infectionProbability && pp.infected==false)
                     {
                         pp.infected = true;
+                        totalInfectedPeople++;
                     }
                 }
             }
@@ -147,6 +175,7 @@ function spreadAgain()
     {
         recalibrate(updatedPeople2);
     }
+    totalDeathsOverTime.push(deadPeople.length);
     return updatedPeople;
 }
 

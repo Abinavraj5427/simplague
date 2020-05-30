@@ -6,6 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link type="text/css" rel="stylesheet" href="main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -42,19 +43,15 @@
 		</div>
 
 		<div id = "output_container">
-			<label>Output</label>
+			<label>Final Statistics</label>
 			<br/>
-			<label>Total Days: 0 days</label>
+			<label id="total_days">Total Days: 0 days</label>
 			<br/>
-			<label>Total Infected: 400/1000</label>
+			<label id="total_infected">Total Infected: 0/1000</label>
 			<br/>
-			<label>Percent Infected: 0.02</label>
+			<label id="percent_infected">Percent Infected: 0.0</label>
 			<br/>
-			<label>Percent Death: 0.02</label>
-			<br/>
-			<label>Disease Stage: Epidemic</label>
-			<br/>
-			<label>Death Count: 100</label>
+			<label id="death_count">Total Dead: 0</label>
 			<div id="chartContainer" style="height: 200px; width: 100%;"></div>
 		</div>
 	
@@ -65,8 +62,9 @@
 	</div>
 	<script src = "../canvasjs.min.js"></script>
 	<script>
-		window.onload = function () {
- 
+
+		if($("#total_days").val()!="Total Days: 0 days")
+		{
 		var chart = new CanvasJS.Chart("chartContainer", {
 			animationEnabled: true,
 			theme: "dark2",
@@ -81,8 +79,8 @@
 				indexLabelFontSize: 16,
 				dataPoints: [
 					{ y: 450 },
-					{ y: 414},
-					{ y: 520},
+					{ y: 414 },
+					{ y: 520 },
 					{ y: 460 },
 					{ y: 450 },
 					{ y: 500 },
@@ -96,8 +94,8 @@
 			}]
 		});
 		chart.render();
-	
-	}            
+		}
+	        
 	</script>
 	<script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
 		varying vec2 vUv;
