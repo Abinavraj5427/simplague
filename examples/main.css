@@ -63,7 +63,7 @@ a, button, input, select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(0,0,0,0.7);
+	background: rgba(0,0,0);
 }
 
 	#overlay button {
@@ -73,6 +73,11 @@ a, button, input, select {
 		padding: 16px 20px;
 		text-transform: uppercase;
 		cursor: pointer;
+	}
+
+	#overlay h1{
+		color:white;
+		text-align: center;
 	}
 
 #notSupported {

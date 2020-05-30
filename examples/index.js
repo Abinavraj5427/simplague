@@ -22,6 +22,7 @@ const globeHeight = 1024 / 2;
 var numberOfPoints = 1000;
 var radiusOfSphere = 1;
 
+
 var loaderPromise = new Promise(function (resolve, reject) {
     function loadDone(x) {
         console.log("loader successfully completed loading task");
@@ -42,9 +43,15 @@ then(function (response) {
         spreadAgain();
         show();
     }
-    init();
-    animate();
-
+    // init();
+    //animate();
+    document.getElementById("loading").remove();
+    var overlay = document.getElementById("overlay");
+    var startbtn = document.createElement("button");
+    startbtn.id = "startButton";
+    startbtn.innerHTML = "START";
+	startbtn.addEventListener( 'click', init );
+    overlay.appendChild(startbtn);
 }, function (err) {
     console.log(err);
 });
@@ -131,7 +138,8 @@ export function generateValidVector()
 
 function init() {
 
-
+    var overlay = document.getElementById( 'overlay' );
+				overlay.remove();
 
     var population_slider = document.getElementById("population");
     var population_label = document.getElementById("population_label");
@@ -226,25 +234,25 @@ function init() {
     // controls.addEventListener('change', renderer);
     // controls.minDistance = 500;
     // controls.maxDistance = 1500;
-    let materialArray = [];
-    let texture_ft = new THREE.TGALoader().load('textures/galaxy+Z.tga');
-    let texture_bk = new THREE.TGALoader().load('textures/galaxy-Z.tga');
-    let texture_up = new THREE.TGALoader().load('textures/galaxy+Y.tga');
-    let texture_dn = new THREE.TGALoader().load('textures/galaxy-Y.tga');
-    let texture_lf = new THREE.TGALoader().load('textures/galaxy-X.tga');
-    let texture_rt = new THREE.TGALoader().load('textures/galaxy+X.tga');
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
-    materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
-    for(let i = 0; i<6;i++){
-        materialArray[i].side = THREE.BackSide;
-    }
-    let skyboxGeo = new THREE.BoxGeometry(10000,10000, 10000);
-    let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-    scene.add(skybox); 
+    // let materialArray = [];
+    // let texture_ft = new THREE.TGALoader().load('textures/galaxy+Z.tga');
+    // let texture_bk = new THREE.TGALoader().load('textures/galaxy-Z.tga');
+    // let texture_up = new THREE.TGALoader().load('textures/galaxy+Y.tga');
+    // let texture_dn = new THREE.TGALoader().load('textures/galaxy-Y.tga');
+    // let texture_lf = new THREE.TGALoader().load('textures/galaxy-X.tga');
+    // let texture_rt = new THREE.TGALoader().load('textures/galaxy+X.tga');
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
+    // for(let i = 0; i<6;i++){
+    //     materialArray[i].side = THREE.BackSide;
+    // }
+    // let skyboxGeo = new THREE.BoxGeometry(10000,10000, 10000);
+    // let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+    // scene.add(skybox); 
 
     //AUDIO
     var listener = new THREE.AudioListener();
@@ -258,6 +266,8 @@ function init() {
         sound.setVolume(0.5);
         sound.play();
     });
+
+    animate();
 }
 
 function onWindowResize() {
@@ -288,5 +298,5 @@ function animate() {
 function update() {}
 
 function render() {
-   //renderer.render(scene, camera);
+   renderer.render(scene, camera);
 }
