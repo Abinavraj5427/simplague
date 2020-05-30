@@ -1,6 +1,6 @@
 import {generateValidVector} from './index.js';
 
-
+var everyone = [];
 var people = [];
 var deadPeople = [];
 var totalInfectedPeople=0;
@@ -119,8 +119,10 @@ function totalDead()
 
 function spreadAgain()
 {
-    var updatedPeople = [];
+ //   var updatedPeople = [];
     var updatedPeople2 = [];
+    everyone = [];
+
     totalDays+=5;
     for(var a=0;a<people.length;a++)
     {
@@ -148,7 +150,7 @@ function spreadAgain()
                 // newx = newx/magnitude;
                 // newy = newy/magnitude;
                 // newz = newz/magnitude;
-                updatedPeople.push(vector);
+                // updatedPeople.push(vector);
                 p.xpos = newx;
                 p.ypos = newy;
                 p.zpos = newz;
@@ -170,13 +172,25 @@ function spreadAgain()
                 }
             }
         }
+        var col;
+        if(people[a].dead==true)
+            col = THREE.Vector3(0,0,0);//white
+        else if(infected)
+            col = THREE.Vector3(1,0,0);//red
+        else
+            col = THREE.Vector3(1,1,1)//black
+        
+        everyone.push({
+            position: THREE.Vector3(people[a].xpos,people[a].ypos,people[a].zpos),
+            color: col
+        });
     }
     if(updatedPeople2.length>0)
     {
         recalibrate(updatedPeople2);
     }
     totalDeathsOverTime.push(deadPeople.length);
-    return updatedPeople;
+    return everyone;
 }
 
 function recalibrate(updatedPeople2)
