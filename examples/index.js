@@ -44,9 +44,13 @@ loaderPromise.
 then(function (response) {
     texture = response;
     positionData = getCartesianPositions(numberOfPoints, radiusOfSphere);
-    init();
-    animate();
-
+    document.getElementById("loading").remove();
+    var overlay = document.getElementById("overlay");
+    var startbtn = document.createElement("button");
+    startbtn.id = "startButton";
+    startbtn.innerHTML = "START";
+	startbtn.addEventListener( 'click', init );
+    overlay.appendChild(startbtn);
 }, function (err) {
     console.log(err);
 });
@@ -133,7 +137,8 @@ export function generateValidVector()
 
 function init() {
 
-
+    var overlay = document.getElementById( 'overlay' );
+				overlay.remove();
 
     var population_slider = document.getElementById("population");
     var population_label = document.getElementById("population_label");
@@ -223,7 +228,7 @@ function init() {
     var light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
@@ -236,6 +241,45 @@ function init() {
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     window.addEventListener('resize', onWindowResize, false);
+
+    // A SKYBOX FOR A UNIVERSE
+    // controls.addEventListener('change', renderer);
+    // controls.minDistance = 500;
+    // controls.maxDistance = 1500;
+    // let materialArray = [];
+    // let texture_ft = new THREE.TGALoader().load('textures/galaxy+Z.tga');
+    // let texture_bk = new THREE.TGALoader().load('textures/galaxy-Z.tga');
+    // let texture_up = new THREE.TGALoader().load('textures/galaxy+Y.tga');
+    // let texture_dn = new THREE.TGALoader().load('textures/galaxy-Y.tga');
+    // let texture_lf = new THREE.TGALoader().load('textures/galaxy-X.tga');
+    // let texture_rt = new THREE.TGALoader().load('textures/galaxy+X.tga');
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
+    // materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
+    // for(let i = 0; i<6;i++){
+    //     materialArray[i].side = THREE.BackSide;
+    // }
+    // let skyboxGeo = new THREE.BoxGeometry(10000,10000, 10000);
+    // let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+    // scene.add(skybox); 
+
+    //AUDIO
+    var listener = new THREE.AudioListener();
+    camera.add(listener);
+    var sound = new THREE.Audio(listener);
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load('textures/bensound-slowmotion.ogg', //from ben-sound.com
+    function(buffer){
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(0.5);
+        sound.play();
+    });
+
+    animate();
 }
 
 function onWindowResize() {
@@ -266,5 +310,5 @@ function animate() {
 function update() {}
 
 function render() {
-    renderer.render(scene, camera);
+   renderer.render(scene, camera);
 }

@@ -155,18 +155,18 @@ function recalibrate(updatedPeople2)
     for(var a=0;a<updatedPeople2.length;a++)
     {
         var adj = updatedPeople2[a].adjacentPeople;
-        // for(var d=0;d<adj.length;d++)
-        // {
-        //     var adj2 = adj[d].adjacentPeople;
-        //     for(var dd=0;dd<adj2.length;dd++)
-        //     {
-        //         if(adj2[dd]==updatedPeople2[a])
-        //         {
-        //             adj2.splice(dd,1);
-        //             break;
-        //         }
-        //     }
-        // }
+        for(var d=0;d<adj.length;d++)
+        {
+            var adj2 = adj[d].adjacentPeople;
+            for(var dd=0;dd<adj2.length;dd++)
+            {
+                if(adj2[dd]==updatedPeople2[a])
+                {
+                    adj2.splice(dd,1);
+                    break;
+                }
+            }
+        }
         updatedPeople2[a].adjacentPeople = [];
 
         for(var i=0;i<people.length;i++)
