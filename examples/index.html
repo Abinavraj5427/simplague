@@ -39,7 +39,8 @@
 			<div class="slidecontainer">
 				<input type="range" min="0" max="100" value="10" class="slider" id="transportation_rate">
 			</div>
-			<button id="simulate_btn">Test</button>
+			<button id="simulate_btn">Reset</button>
+			<button id="spread">Perform timesetep</button>
 		</div>
 
 		<div id="output_container">
@@ -117,7 +118,7 @@
 			chart.render();
 		}
 	</script>
-	<script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
+	<!-- <script id="vertexShader" type="x-shader/x-vertex" src="vertex.vert">
 		varying vec2 vUv;
 		varying vec4 worldPos;
 		void main() {
@@ -133,26 +134,27 @@
 	<script id="fragmentShader" type="x-shader/x-fragment" src="fragment.frag">
 		uniform sampler2D texture1;
 	
-		#define numSubjects 1000
+		#define numSubjects 700
 
 		struct Subject{
 			vec3 position;
+			vec3 color;
 		};
-		uniform vec3 subjects[numSubjects];
+		uniform Subject subjects[numSubjects];
 
 		varying vec2 vUv;
 		varying vec4 worldPos;
 		void main() {
 			gl_FragColor = texture2D(texture1, vUv); 
 				for(int i = 0; i<numSubjects; i++){
-					if(distance(subjects[i], worldPos.xyz)<0.005){
-						gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+					if(distance(subjects[i].position, worldPos.xyz)<0.005){
+						gl_FragColor = vec4(subjects[i].color, 1.0);
 					}
 				
 				}
 			
 		}
-	</script>
+	</script> -->
 	<script type="module" src="index.js"></script>
 
 </body>

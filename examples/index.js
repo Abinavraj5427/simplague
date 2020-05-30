@@ -1,12 +1,14 @@
 import * as THREE from '../build/three.module.js';
 import {
-    createWorld
+    createWorld,
+    spreadAgain
 } from './spread.js';
-
 
 import {
     OrbitControls
 } from './jsm/controls/OrbitControls.js';
+
+
 
 var container;
 
@@ -28,13 +30,21 @@ var trs;
 const globeRadius = 1;
 const globeWidth = 2048 / 2;
 const globeHeight = 1024 / 2;
-var numberOfPoints = 1000;
+var numberOfPoints = 100;
 var radiusOfSphere = 1;
 var positionData = [];
 var startButton = document.getElementById('simulate_btn');
+var spreadbutton = document.getElementById('spread');
+var spheres = [];
 
 startButton.addEventListener('click', function () {
     createWorld(positionData, ps, sds, sdr, irs, ips, trs)
+});
+spreadbutton.addEventListener('click', function () {
+    console.log(positionData);
+    positionData = spreadAgain();
+    console.log(positionData);
+    updatePeople();
 });
 var loaderPromise = new Promise(function (resolve, reject) {
     function loadDone(x) {
@@ -47,8 +57,11 @@ var loaderPromise = new Promise(function (resolve, reject) {
 var texture;
 loaderPromise.
 then(function (response) {
+    scene = new THREE.Scene();
     texture = response;
-    positionData = getCartesianPositions(numberOfPoints, radiusOfSphere);
+    positionData = createPeople(numberOfPoints, radiusOfSphere);
+
+
     document.getElementById("loading").remove();
     var overlay = document.getElementById("overlay");
     var startbtn = document.createElement("button");
@@ -100,7 +113,7 @@ function getPixel(imagedata, x, y) {
 
 }
 
-function getCartesianPositions(howMany) {
+function createPeople(howMany) {
 
     // Create and array to store our vector3 point data
     var vectors = [];
@@ -108,35 +121,46 @@ function getCartesianPositions(howMany) {
     // Create new points using random x,y and z properties then setting vector length to radius
 
     for (var i = 0; i < howMany; i += 1) {
-        // var vec3 = new THREE.Vector3();
-
-        // vec3.x = THREE.Math.randFloatSpread(1);
-        // vec3.y = THREE.Math.randFloatSpread(1);
-        // vec3.z = THREE.Math.randFloatSpread(1);
-
-        // vec3.setLength(radius);
-
-        // vectors.push(vec3);
         var imagedata = getImageData(texture.image);
         do {
             var x = Math.floor(Math.random() * 2048);
             var y = Math.floor(Math.random() * 830);
         } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
-        vectors.push(convertFlatCoordsToSphereCoords(x, y));
+        var pos = convertFlatCoordsToSphereCoords(x, y);
+        vectors.push({
+            position: pos,
+            color: new THREE.Vector3(1, 1, 1)
+        });
+        let geo = new THREE.SphereGeometry(.005, 6, 4);
+        let mat = new THREE.MeshBasicMaterial({
+            color: 0xffffff
+        });
+
+        var sphere = new THREE.Mesh(geo, mat);
+        sphere.position.x = pos.x;
+        sphere.position.y = pos.y;
+        sphere.position.z = pos.z;
+
+        spheres.push(sphere);
+        scene.add(sphere);
     }
 
     return vectors;
 }
-export function generateValidVector() {
 
+function updatePeople() {
+    for (var i = 0; i < numberOfPoints; i++) {
+        spheres[i].position.set(positionData[i].x, positionData[i].y, positionData[i].z);
+    }
+}
+
+export function generateValidVector() {
     var imagedata = getImageData(texture.image);
     do {
         var x = Math.floor(Math.random() * 2048);
         var y = Math.floor(Math.random() * 830);
     } while (getPixel(imagedata, x, y).b / getPixel(imagedata, x, y).r > 2.0 || getPixel(imagedata, x, y).b > 200 || (getPixel(imagedata, x, y).r > 200 && getPixel(imagedata, x, y).g > 130));
     return convertFlatCoordsToSphereCoords(x, y);
-
-
 }
 
 function init() {
@@ -205,24 +229,27 @@ function init() {
     } // Update the current slider value (each time you drag the slider handle)
     trs = transportation_rate_slider.value;
 
+    createWorld(positionData, ps, sds, sdr, irs, ips, trs);
 
+    // var material = new THREE.ShaderMaterial({
 
-    var material = new THREE.ShaderMaterial({
+    //     uniforms: {
+    //         texture1: {
+    //             type: "t",
+    //             value: new THREE.TextureLoader().load('ojwD8.jpg')
+    //         },
+    //         subjects: {
+    //             value: positionData
+    //         }
+    //     },
 
-        uniforms: {
-            texture1: {
-                type: "t",
-                value: new THREE.TextureLoader().load('ojwD8.jpg')
-            },
-            subjects: {
-                value: positionData
-            }
-        },
+    //     vertexShader: document.getElementById('vertexShader').text,
 
-        vertexShader: document.getElementById('vertexShader').text,
+    //     fragmentShader: document.getElementById('fragmentShader').text
 
-        fragmentShader: document.getElementById('fragmentShader').text
-
+    // });
+    var material = new THREE.MeshBasicMaterial({
+        map: texture
     });
     var geometry = new THREE.SphereGeometry(1, 128, 128);
     var globe = new THREE.Mesh(geometry, material);
@@ -233,7 +260,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
 
-    scene = new THREE.Scene();
+
 
     var light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
