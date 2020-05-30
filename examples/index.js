@@ -14,6 +14,7 @@ var mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+let numSubjects = 5;
 
 var numberOfPoints = 7000;
 var radiusOfSphere = 1;
@@ -27,14 +28,24 @@ positionData.forEach(function(vert, vertIndex) {
 }, this);
 
 // immediately use the texture for material creation
+
+var subjectPos = [];
+var i;
+for (i = 0; i < numSubjects; i++) {
+    var vector = (new THREE.Vector3(1.0, i, 0.0)).normalize();
+    subjectPos.push(vector);
+}
+console.log(subjectPos);
+
 var material = new THREE.ShaderMaterial({
 
     uniforms: {
-
-
         texture1: {
             type: "t",
-            value: THREE.ImageUtils.loadTexture('ojwD8.jpg')
+            value: new THREE.TextureLoader().load('ojwD8.jpg')
+        },
+        subjects: {
+            value: subjectPos
         }
     },
 
@@ -44,7 +55,7 @@ var material = new THREE.ShaderMaterial({
 
 });
 var geometry = new THREE.SphereGeometry(1, 128, 128);
-var cube = new THREE.Mesh(geometry, material);
+var globe = new THREE.Mesh(geometry, material);
 var controls;
 
 
@@ -91,11 +102,13 @@ function init() {
     controls = new OrbitControls(camera, renderer.domElement);
     camera.position.z = 5;
     controls.update();
-    scene.add(cube);
+    scene.add(globe);
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 
     window.addEventListener('resize', onWindowResize, false);
+
+
 }
 
 function onWindowResize() {
@@ -116,8 +129,6 @@ function onDocumentMouseMove(event) {
 }
 
 
-//
-
 function animate() {
     requestAnimationFrame(animate);
 
@@ -125,9 +136,7 @@ function animate() {
     render();
 }
 
-function update() {
-    cube.rotation.y += 0.001;
-}
+function update() {}
 
 function render() {
     renderer.render(scene, camera);
