@@ -1,21 +1,29 @@
-import * as THREE from '../build/three.module.js';
 import {generateValidVector} from './index.js';
 
 
 var people = [];
 var deadPeople = [];
-//var population = 1000;
-var socialDistancing = .05;
-var socialDistancingParticipationRate = .5;
-var infectionRadius = .1;//if in radius, then in adjacency list
-var infectionProbability = .1;
-var initialProbability = .005;
-var transportationRate = .05;
-var deathChance = .05;
+var population = 1;
+var socialDistancing = 0;
+var socialDistancingParticipationRate = 0;
+var infectionRadius = 0;//if in radius, then in adjacency list
+var infectionProbability = 0;
+var initialProbability = .02;
+var transportationRate = 0;
+var deathChance = .03;
 //createWorld();
 
-export function createWorld(positionData) 
+export function createWorld(positionData, ps,sds,sdr,irs,ips,trs) 
 {
+    people=[];
+    deadPeople=[];
+    population=ps;
+    socialDistancing=sds/100;
+    socialDistancingParticipationRate=sdr/100;
+    infectionRadius=irs/100;
+    infectionProbability=ips/100;
+    transportationRate=trs/100;
+    console.log(population+" "+socialDistancing+" "+socialDistancingParticipationRate+" "+infectionRadius+" "+infectionProbability+" "+transportationRate);
     for(var i=0;i<positionData.length;i++)
     {
         var x = positionData[i].x;
@@ -28,7 +36,7 @@ export function createWorld(positionData)
         // x = x/magnitude;
         // y = y/magnitude;
         // z = z/magnitude;
-        console.log(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)));
+        //console.log(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)));
         
         var p = new Person(x,y,z,Math.random()<=initialProbability);
             
@@ -56,13 +64,18 @@ export function createWorld(positionData)
     }
 
     console.log(totalInfected());
+    for(var a=0;a<10;a++)
+    {
+        spreadAgain();
+        show();
+    }
 }
-export function show()
+function show()
 {
     console.log("infected "+totalInfected());
     console.log("dead "+totalDead())
 }
-export function totalInfected()
+function totalInfected()
 {
     var t = 0;
     for(var a=0;a<people.length;a++)
@@ -70,7 +83,7 @@ export function totalInfected()
             t++;
     return t;
 }
-export function totalDead()
+function totalDead()
 {
     var t = 0;
     for(var a=0;a<people.length;a++)
@@ -79,7 +92,7 @@ export function totalDead()
     return t;
 }
 
-export function spreadAgain()
+function spreadAgain()
 {
     var updatedPeople = [];
     var updatedPeople2 = [];
